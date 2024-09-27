@@ -1,0 +1,53 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4f93e24..45cda8a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2,7 +2,7 @@
+ ############ Setup project and cmake
+ # Minimum cmake requirement. We should require a quite recent
+ # cmake for the dependency find macros etc. to be up to date.
+-cmake_minimum_required (VERSION 2.8.8)
++cmake_minimum_required (VERSION 3.29.2)
+ 
+ ############ Paths
+ 
+@@ -73,8 +73,8 @@ include (CMakeHelpers)
+ 
+ # Override from command line "CMake -D<OPTION>=TRUE/FALSE/0/1/ON/OFF"
+ option (ENABLE_CPP11 "Build websocketpp with CPP11 features enabled." TRUE)
+-option (BUILD_EXAMPLES "Build websocketpp examples." FALSE)
+-option (BUILD_TESTS "Build websocketpp tests." FALSE)
++option (BUILD_EXAMPLES "Build websocketpp examples." TRUE)
++option (BUILD_TESTS "Build websocketpp tests." TRUE)
+ 
+ if (BUILD_TESTS OR BUILD_EXAMPLES)
+ 
+@@ -124,7 +124,7 @@ if (BUILD_TESTS OR BUILD_EXAMPLES)
+     # g++
+     if (CMAKE_COMPILER_IS_GNUCXX)
+         if (NOT APPLE)
+-            set (WEBSOCKETPP_PLATFORM_LIBS pthread rt)
++            set (WEBSOCKETPP_PLATFORM_LIBS pthread ws2_32 wsock32)
+         else()
+             set (WEBSOCKETPP_PLATFORM_LIBS pthread)
+         endif()
+@@ -213,9 +213,9 @@ if (BUILD_TESTS OR BUILD_EXAMPLES)
+     set (Boost_FIND_QUIETLY TRUE)
+     set (Boost_DEBUG FALSE)
+     set (Boost_USE_MULTITHREADED TRUE)
+-    set (Boost_ADDITIONAL_VERSIONS "1.39.0" "1.40.0" "1.41.0" "1.42.0" "1.43.0" "1.44.0" "1.46.1") # todo: someone who knows better spesify these!
++    set (Boost_ADDITIONAL_VERSIONS "1.39.0" "1.40.0" "1.41.0" "1.42.0" "1.43.0" "1.44.0" "1.46.1" "1.84.0") # todo: someone who knows better spesify these!
+ 
+-    find_package (Boost 1.39.0 COMPONENTS "${WEBSOCKETPP_BOOST_LIBS}")
++    find_package (Boost 1.84.0 REQUIRED COMPONENTS ${WEBSOCKETPP_BOOST_LIBS})
+ 
+     if (Boost_FOUND)
+         # Boost is a project wide global dependency.
+@@ -278,5 +278,4 @@ write_basic_package_version_file("${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/
+ install (FILES
+   "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/websocketpp-config.cmake"
+   "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/websocketpp-configVersion.cmake"
+-  DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
+-
++  DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
+\ No newline at end of file
